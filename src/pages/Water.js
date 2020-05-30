@@ -1,9 +1,9 @@
 import React from 'react';
-import { Text } from 'react-native'
+import { SafeAreaView } from 'react-native'
 // import { Container } from './styles';
 
 function Water() {
-  return <Text>Water</Text>;
+  return <SafeAreaView>Water</SafeAreaView>;
 }
 
 export default Water;
