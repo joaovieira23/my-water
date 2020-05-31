@@ -2,18 +2,25 @@ import React from 'react';
 import { Text ,StyleSheet, Image, TouchableOpacity } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native'
 
 import bannerImg from '../assets/banner.png';
 
 export default function Welcome() {
+  const navigation = useNavigation();
+
+  function navigateToWater() {
+    navigation.navigate('Water');
+  }
+
   return  (
      <LinearGradient
         colors={['#282F68', '#2A3379']}
         style={styles.container}
      >
         <Image style={styles.banner} source={bannerImg}/>
-        <Text style={styles.title}>Enter the daily amount of water you want to drink</Text>
-        <TouchableOpacity style={styles.button} onPress={() => {}}>
+        <Text style={styles.title}>Control your daily water intake</Text>
+        <TouchableOpacity style={styles.button} onPress={navigateToWater}>
           <MaterialIcons name="opacity" size={32} color="#FFF"/>
         </TouchableOpacity>
     </LinearGradient>
