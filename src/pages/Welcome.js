@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text ,StyleSheet, Image, TouchableOpacity, TextInput, KeyboardAvoidingView } from 'react-native'
+import { Text ,StyleSheet, Image, TouchableOpacity, TextInput, View, KeyboardAvoidingView } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native'
 
@@ -10,20 +10,23 @@ export default function Welcome() {
   const navigation = useNavigation();
 
   function navigateToWater() {
-    navigation.navigate('Water', {pw: weightQuantity});
+    navigation.navigate('Water', {amount: weightQuantity});
   }
 
   return  (
-        <KeyboardAvoidingView style={styles.container} behavior='position'>
+        <KeyboardAvoidingView style={styles.container} behavior='padding'>
           <Image style={styles.banner} source={bannerImg}/>
           <Text style={styles.title}>Control your daily water intake</Text>
-          <Text style= {styles.enterInput}>Enter your weight or the amount of water in mL you want to drink every day</Text>
+          <View style={{ marginVertical: 50 }}>
+          <Text style= {styles.enterInput}>Enter the amount in mL of water you want to drink daily</Text>
           <TextInput
+            placeholderTextColor={'white'}
             keyboardType='numeric'
             style={styles.input}
-            placeholder='weight or quantity'
+            placeholder='quantity'
             onChangeText={(val) => setweightQuantity(val)}
             />
+          </View>
           <TouchableOpacity style={styles.button} onPress={navigateToWater}>
             <MaterialIcons name="opacity" size={32} color="#FFF"/>
           </TouchableOpacity>
@@ -49,8 +52,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     maxWidth: 300,
-    marginVertical: 20,
-    paddingBottom: 20
   },
 
   enterInput: {
@@ -59,8 +60,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     maxWidth: 300,
-    marginVertical: 20
-
   },
 
   button: {
@@ -71,16 +70,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     alignSelf: 'center',
     borderRadius: 36,
-    marginVertical: 30
+    marginVertical: 10
   },
 
   input: {
     borderWidth: 1,
     borderColor: 'black',
     padding: 8,
-    margin: 10,
+    marginTop: 10,
     width: 300,
-    fontWeight: 'bold',
-    color: 'white'
+    // fontWeight: 'bold',
+    color: 'white',
   },
 })

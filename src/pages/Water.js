@@ -1,71 +1,84 @@
 import React, { useState } from 'react';
-import { Text ,StyleSheet, TouchableOpacity, Picker, Modal, View, TouchableHighlight} from 'react-native'
+import { Text ,StyleSheet, TouchableOpacity, ScrollView , Modal, View } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 // import { useNavigation } from '@react-navigation/native'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
+let percentual = 0;
+
 export default function Water({ route, navigation }) {
   // const navigation = useNavigation();
   const [pickerDisplayed, setPickerDisplayed] = useState(false);
-  const [pickerValue, setPickerValue] = useState('')
-  const { pw } = route.params;
+  const [pickerValue, setPickerValue] = useState([])
+  const { amount } = route.params;
+
 
   function handleSubmit() {
-    console.log(pw);
+    // console.log(amount);
     setPickerDisplayed(!pickerDisplayed)
-    console.log(!pickerDisplayed)
+    // console.log(!pickerDisplayed)
   }
 
-  function setValue(newValue) {
-    setPickerValue(newValue);
+  function setValue({ value }) {
+
+    console.log(value);
+    if(percentual === 0) {
+      percentual = amount - value;
+      console.log(percentual)
+    }
+    else {
+      percentual = percentual - value
+    }
+    console.log(percentual);
     setPickerDisplayed(!pickerDisplayed)
+    setPickerValue(value);
   }
 
   const pickerValues = [
     {
       title: '50ml',
-      value: '50'
+      value: 50
     },
     {
       title: '100ml',
-      value: '100'
+      value: 100
     },
     {
       title: '150ml',
-      value: '150'
+      value: 150
     },
     {
       title: '200ml',
-      value: '200'
+      value: 200
     },
     {
       title: '300ml',
-      value: '300'
+      value: 300
     },
     {
       title: '330ml',
-      value: '330'
+      value: 330
     },
     {
       title: '400ml',
-      value: '400'
+      value: 400
     },
     {
       title: '500ml',
-      value: '500'
+      value: 500
     },
     {
       title: '600ml',
-      value: '600'
+      value: 600
     },
     {
       title: '800ml',
-      value: '800'
+      value: 800
     },
     {
       title: '1000ml (1 Litro)',
-      value: '1000'
+      value: 1000
     },
   ]
 
@@ -76,11 +89,15 @@ export default function Water({ route, navigation }) {
 
         <AnimatedCircularProgress
           size={300}
-          width={40}
-          fill={100}
+          width={12}
+          fill={(percentual * 100) / amount}
           tintColor="#75A1DE"
-          backgroundColor="#fff"
-        />
+          rotation={0}
+          backgroundColor="#fff">
+          {() => (
+            <Text style={styles.titleIntern}>{amount - percentual}mL de {amount}mL</Text>
+          )}
+        </AnimatedCircularProgress>
 
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <MaterialIcons name="add" size={32} color="#FFF"/>
@@ -88,16 +105,18 @@ export default function Water({ route, navigation }) {
 
         <Modal visible={pickerDisplayed} animationType={"slide"} transparent={true}>
           <View style={styles.picker}>
-            <Text>Please pick a value</Text>
+          <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center' }} showsVerticalScrollIndicator={false} style={styles.scrollView}>
+            <Text style={{ color: '#999', fontWeight: 'bold', fontSize:18 }} >Please pick a value</Text>
             { pickerValues.map((value, index) => {
-              return <TouchableHighlight key={index} onPress={() => setValue(value)} style={{ paddingTop: 6, paddingBottom: 4 }}>
+              return <TouchableOpacity key={index} onPress={() => setValue(value)} style={{ paddingTop: 6, paddingBottom: 4 }}>
                   <Text style={styles.itemPicker}>{ value.title }</Text>
-                </TouchableHighlight>
+                </TouchableOpacity>
             })}
 
-            <TouchableHighlight onPress={() => handleSubmit()} style={{ paddingTop: 4, paddingBottom: 4 }}>
-              <Text style={{ color: '#999' }}>Cancel</Text>
-            </TouchableHighlight>
+            <TouchableOpacity onPress={() => handleSubmit()} style={{ paddingTop: 4, paddingBottom: 4 }}>
+              <Text style={{ color: '#999', fontSize:18, fontWeight: 'bold' }}>Cancel</Text>
+            </TouchableOpacity>
+          </ScrollView>
           </View>
         </Modal>
     </LinearGradient>
@@ -121,6 +140,12 @@ const styles = StyleSheet.create({
     paddingBottom: 80
   },
 
+  titleIntern: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold'
+  },
+
   button: {
     width: 72,
     height: 72,
@@ -128,24 +153,30 @@ const styles = StyleSheet.create({
     borderRadius: 36,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 80
+    marginVertical: 100
   },
   picker: {
     padding: 20,
-    backgroundColor: '#282F68',
+    backgroundColor: '#B0C4DE',
     bottom: 10,
     fontWeight: 'bold',
     left: 1,
     right: 1,
     alignItems: 'center',
     position: 'absolute' ,
-    borderRadius: 10,
-    maxWidth: 510
+    borderRadius: 40,
+    maxWidth: 520,
+    maxHeight: 300
   },
 
   itemPicker: {
     fontWeight: 'bold',
-    fontSize: 8
+    fontSize: 18,
+    color: 'white',
+    margin: 5
+  },
+  scrollView: {
+    marginHorizontal: 20,
   }
 })
 
