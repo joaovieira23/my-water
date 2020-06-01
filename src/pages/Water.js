@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Text ,StyleSheet, TouchableOpacity, ScrollView , Modal, View } from 'react-native'
+import { Text ,StyleSheet, TouchableOpacity, ScrollView , Modal, View, Alert } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 // import { useNavigation } from '@react-navigation/native'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 let percentual = 0;
+let flagAlert = 0;
 
 export default function Water({ route, navigation }) {
   // const navigation = useNavigation();
@@ -23,16 +24,29 @@ export default function Water({ route, navigation }) {
   function setValue({ value }) {
 
     console.log(value);
-    if(percentual === 0) {
+    if(percentual === 0 || percentual < 0) {
       percentual = amount - value;
       console.log(percentual)
     }
     else {
       percentual = percentual - value
     }
-    console.log(percentual);
+    // console.log(percentual);
+
+    if(percentual === 0 || percentual < 0 && flagAlert == 0) {
+      flagAlert = 1
+      Alert.alert(
+        'Congratulations',
+        'You have reached your daily goal',
+        [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+      )
+    }
+
     setPickerDisplayed(!pickerDisplayed)
     setPickerValue(value);
+
   }
 
   const pickerValues = [
