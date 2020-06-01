@@ -10,14 +10,14 @@ export default function Welcome() {
   const navigation = useNavigation();
 
   function navigateToWater() {
-    navigation.navigate('Water');
+    navigation.navigate('Water', {pw: weightQuantity});
   }
 
   return  (
         <KeyboardAvoidingView style={styles.container} behavior='position'>
           <Image style={styles.banner} source={bannerImg}/>
           <Text style={styles.title}>Control your daily water intake</Text>
-          <Text style= {styles.enterInput}>Enter your weight or the amount of water you want to drink each day</Text>
+          <Text style= {styles.enterInput}>Enter your weight or the amount of water in mL you want to drink every day</Text>
           <TextInput
             keyboardType='numeric'
             style={styles.input}
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     maxWidth: 300,
     marginVertical: 20
+
   },
 
   button: {
@@ -78,6 +79,8 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     padding: 8,
     margin: 10,
-    width: 300
+    width: 300,
+    fontWeight: 'bold',
+    color: 'white'
   },
 })

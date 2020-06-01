@@ -1,22 +1,77 @@
 import React, { useState } from 'react';
-import { Text ,StyleSheet, TouchableOpacity, Picker } from 'react-native'
+import { Text ,StyleSheet, TouchableOpacity, Picker, Modal, View, TouchableHighlight} from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 // import { useNavigation } from '@react-navigation/native'
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
-export default function Water(props) {
+export default function Water({ route, navigation }) {
   // const navigation = useNavigation();
-  const [water, setWater] = useState('');
+  const [pickerDisplayed, setPickerDisplayed] = useState(false);
+  const [pickerValue, setPickerValue] = useState('')
+  const { pw } = route.params;
 
   function handleSubmit() {
+    console.log(pw);
+    setPickerDisplayed(!pickerDisplayed)
+    console.log(!pickerDisplayed)
   }
 
+  function setValue(newValue) {
+    setPickerValue(newValue);
+    setPickerDisplayed(!pickerDisplayed)
+  }
+
+  const pickerValues = [
+    {
+      title: '50ml',
+      value: '50'
+    },
+    {
+      title: '100ml',
+      value: '100'
+    },
+    {
+      title: '150ml',
+      value: '150'
+    },
+    {
+      title: '200ml',
+      value: '200'
+    },
+    {
+      title: '300ml',
+      value: '300'
+    },
+    {
+      title: '330ml',
+      value: '330'
+    },
+    {
+      title: '400ml',
+      value: '400'
+    },
+    {
+      title: '500ml',
+      value: '500'
+    },
+    {
+      title: '600ml',
+      value: '600'
+    },
+    {
+      title: '800ml',
+      value: '800'
+    },
+    {
+      title: '1000ml (1 Litro)',
+      value: '1000'
+    },
+  ]
+
+
   return  (
-     <LinearGradient
-        colors={['#282F68', '#2A3379']}
-        style={styles.container}
-     >
+     <LinearGradient colors={['#282F68', '#2A3379']} style={styles.container}>
         <Text style={styles.title}>Add the amount of drink</Text>
 
         <AnimatedCircularProgress
@@ -27,36 +82,24 @@ export default function Water(props) {
           backgroundColor="#fff"
         />
 
-
-        <Picker
-          style={styles.picker}
-          selectedValue={water}
-          onValueChange={
-            (itemValue, itemIndex) =>
-              setWater({
-                itemValue
-              })
-          }
-          itemStyle={styles.itemPicker}
-        >
-          <Picker.Item  label="30 ml" value="30" />
-          <Picker.Item label="50 ml" value="50" />
-          <Picker.Item label="100 ml" value="100" />
-          <Picker.Item label="150 ml" value="150" />
-          <Picker.Item label="200 ml" value="200" />
-          <Picker.Item label="250 ml" value="250" />
-          <Picker.Item label="300 ml" value="300" />
-          <Picker.Item label="330 ml" value="330" />
-          <Picker.Item label="400 ml" value="400" />
-          <Picker.Item label="500 ml" value="500" />
-          <Picker.Item label="600 ml" value="600" />
-          <Picker.Item label="800 ml" value="800" />
-          <Picker.Item label="1000 ml (1 Litro)" value="1000 ml" />
-        </Picker>
-
         <TouchableOpacity style={styles.button} onPress={handleSubmit}>
           <MaterialIcons name="add" size={32} color="#FFF"/>
         </TouchableOpacity>
+
+        <Modal visible={pickerDisplayed} animationType={"slide"} transparent={true}>
+          <View style={styles.picker}>
+            <Text>Please pick a value</Text>
+            { pickerValues.map((value, index) => {
+              return <TouchableHighlight key={index} onPress={() => setValue(value)} style={{ paddingTop: 6, paddingBottom: 4 }}>
+                  <Text style={styles.itemPicker}>{ value.title }</Text>
+                </TouchableHighlight>
+            })}
+
+            <TouchableHighlight onPress={() => handleSubmit()} style={{ paddingTop: 4, paddingBottom: 4 }}>
+              <Text style={{ color: '#999' }}>Cancel</Text>
+            </TouchableHighlight>
+          </View>
+        </Modal>
     </LinearGradient>
   );
 }
@@ -75,7 +118,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     maxWidth: 300,
     marginVertical: 20,
-    paddingBottom: 50
+    paddingBottom: 80
   },
 
   button: {
@@ -84,13 +127,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#2e5b9a',
     borderRadius: 36,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginVertical: 80
   },
   picker: {
-    width: 350
+    padding: 20,
+    backgroundColor: '#282F68',
+    bottom: 10,
+    fontWeight: 'bold',
+    left: 1,
+    right: 1,
+    alignItems: 'center',
+    position: 'absolute' ,
+    borderRadius: 10,
+    maxWidth: 510
   },
+
   itemPicker: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    fontSize: 8
   }
 })
 
